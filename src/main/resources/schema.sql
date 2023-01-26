@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  username VARCHAR(50) NOT NULL PRIMARY KEY,
+  password VARCHAR(100) NOT NULL,
+  enabled TINYINT NOT NULL DEFAULT 1
+);
+DROP TABLE IF EXISTS authorities;
+CREATE TABLE  authorities (
+  username VARCHAR(50) NOT NULL PRIMARY KEY,
+  authority VARCHAR(50) NOT NULL
+);
