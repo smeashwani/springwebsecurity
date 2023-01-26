@@ -15,4 +15,10 @@ public class HomeController {
 	public String privateHome() {
 		return "privatePage";
 	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login() {
+		return "login";
+	}
+
 }
