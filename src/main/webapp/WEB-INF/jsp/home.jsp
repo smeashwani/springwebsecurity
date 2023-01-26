@@ -21,6 +21,8 @@ Hello Guest
 	<sec:authorize access="hasRole('ADMIN')">  
 		It will display only to Admin Users  
 	</sec:authorize>
+	</br>
+	<a href="csrf">CSRF</a>
 </body>
 </body>
 </html>

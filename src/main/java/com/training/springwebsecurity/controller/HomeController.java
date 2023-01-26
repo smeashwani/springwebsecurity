@@ -29,5 +29,16 @@ public class HomeController {
 	public String login() {
 		return "login";
 	}
+	
+	@RequestMapping(value = "/csrf", method = RequestMethod.GET)
+	public String csrf() {
+		return "csrf";
+	}
+	
+	@RequestMapping(value = "/csrfSubmit", method = RequestMethod.POST)
+	public String csrfSubmit(String name) {
+		System.out.println("Processing the csrfSubmit Request: "+name);
+		return "/csrf";
+	}
 
 }
