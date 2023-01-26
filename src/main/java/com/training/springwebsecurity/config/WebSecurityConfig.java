@@ -37,6 +37,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.loginPage("/login").permitAll()
 	        .and()
 	        .logout()
-	        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+	        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+	        .and()
+	        .rememberMe()
+	        .key("rem-me-key") // it is name of checkbox at login page
+	        .rememberMeParameter("remember") // it is name of the cookie  
+	        .rememberMeCookieName("rememberlogin")
+	        .tokenValiditySeconds(40) ;// remember for number of seconds  
+
 		}
 }
