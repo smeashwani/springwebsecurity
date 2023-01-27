@@ -56,21 +56,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http//.csrf().disable()
 			.authorizeRequests()
-			.antMatchers("/","/csrf*").permitAll()  // it allow for anyuser
-			.antMatchers("/admin").authenticated() // check authentication 
-			.antMatchers("/admin").hasAnyRole("ADMIN")  // check authorization 
-			.and()
+				.antMatchers("/","/csrf*").permitAll()  // it allow for anyuser
+				.antMatchers("/admin").authenticated() // check authentication 
+				.antMatchers("/admin").hasAnyRole("ADMIN")  // check authorization 
+				.and()
 			.formLogin()
-			.loginPage("/login").permitAll()
-	        .and()
+				.loginPage("/login").permitAll()
+				.and()
 	        .logout()
-	        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-	        .and()
+	        	.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+	        	.and()
 	        .rememberMe()
-	        .key("rem-me-key") // it is name of checkbox at login page
-	        .rememberMeParameter("remember") // it is name of the cookie  
-	        .rememberMeCookieName("rememberlogin")
-	        .tokenValiditySeconds(40) ;// remember for number of seconds  
+	        	.key("rem-me-key") // it is name of checkbox at login page
+	        	.rememberMeParameter("remember") // it is name of the cookie  
+	        	.rememberMeCookieName("rememberlogin")
+	        	.tokenValiditySeconds(40) ;// remember for number of seconds  
 
 		}
 }
