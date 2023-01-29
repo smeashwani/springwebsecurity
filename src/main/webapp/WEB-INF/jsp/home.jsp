@@ -7,10 +7,9 @@
 <body>
 Home page 
 <br>
-Hello Guest
 	<h2>Welcome to spring security</h2>
 	<sec:authorize access="isAuthenticated()"> 
-	<sec:authentication property="principal.username" />
+		Hello <sec:authentication property="principal.username" />
 		<a href="<c:url value='/logout' />">Click here to logout</a>
 	</sec:authorize>
 	
