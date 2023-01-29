@@ -40,9 +40,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 	        .and()
 	        .rememberMe()
-	        .key("rem-me-key") // it is name of checkbox at login page
-	        .rememberMeParameter("remember") // it is name of the cookie  
-	        .rememberMeCookieName("rememberlogin")
+	        .key("rem-me-key") 
+	        .rememberMeParameter("remember") // it is name of checkbox at login page   
+	        .rememberMeCookieName("rememberlogin") // it is name of the cookie
 	        .tokenValiditySeconds(40) ;// remember for number of seconds  
 
 		}
