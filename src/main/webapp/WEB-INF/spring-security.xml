@@ -10,6 +10,7 @@
 
 	<http auto-config="true" xmlns="http://www.springframework.org/schema/security">
 		<intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/**" access="permitAll" />
 	</http>
 	<beans:bean id="encoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder" />
 	<authentication-manager>
