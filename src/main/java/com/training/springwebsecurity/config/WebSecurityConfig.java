@@ -1,5 +1,7 @@
 package com.training.springwebsecurity.config;
 
+import java.util.Arrays;
+
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
@@ -18,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
@@ -61,7 +66,8 @@ public class WebSecurityConfig {
 	
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
-        http//.csrf(csrf -> {csrf.disable();})
+        http.cors(cors -> cors.disable())
+        	.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests((authz) -> authz
             		.requestMatchers(mvc.pattern("/"),mvc.pattern("/login"),mvc.pattern("/csrf"),mvc.pattern("/csrfSubmit")).permitAll()
             		.requestMatchers(mvc.pattern("/admin")).hasRole("ADMIN")
@@ -82,5 +88,4 @@ public class WebSecurityConfig {
 	        });
         return http.build();
     }
-
 }
