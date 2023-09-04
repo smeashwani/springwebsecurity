@@ -1,40 +1,37 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.training</groupId>
-	<artifactId>springwebsecurity</artifactId>
+	<artifactId>springweb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<spring.version>5.2.0.RELEASE</spring.version>
+		<java.version>17</java.version>
+		<spring.version>6.0.11</spring.version>
+		<spring.security.version>6.1.2</spring.security.version>
 	</properties>
-
 
 	<dependencies>
 		<!-- spring security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.security.version}</version>
 		</dependency>
-		
-		<!-- Spring Web -->
+		<!-- Spring web -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
@@ -51,28 +48,38 @@
 			<artifactId>spring-core</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+
 		<!--  Servlet api -->
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-web-api</artifactId>
-			<version>6.0</version>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>6.0.0</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- jstl -->
+		<!--  Database -->
 		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.27</version>
+		</dependency>
+		<!--  JSTL Lib -->
+		<dependency>
+			<groupId>jakarta.servlet.jsp.jstl</groupId>
+			<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.glassfish.web</groupId>
+		    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+		    <version>3.0.1</version>
 		</dependency>
 		
 		<!--  Security lib Tag -->
 		<dependency>  
 		    <groupId>org.springframework.security</groupId>  
 		    <artifactId>spring-security-taglibs</artifactId>  
-		    <version>${spring.version}</version>  
+		    <version>${spring.security.version}</version>  
 		</dependency> 
-		
 		<!-- h2 database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -80,40 +87,48 @@
 			<scope>runtime</scope>
 			<version>2.1.214</version>
 		</dependency>
-
 	</dependencies>
 	<build>
-		<finalName>SpringSecurityMVC</finalName>
+		<finalName>SpringMVCSecurity</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.2</version>
+					<version>3.10.1</version>
 					<configuration>
 						<verbose>true</verbose>
-						<source>1.8</source>
-						<target>1.8</target>
+						<source>17</source>
+						<target>17</target>
 						<showWarnings>true</showWarnings>
 					</configuration>
 				</plugin>
-						
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>3.3.2</version>
+					<configuration>
+						<failOnMissingWebXml>true</failOnMissingWebXml>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>org.codehaus.cargo</groupId>
 					<artifactId>cargo-maven3-plugin</artifactId>
-					<version>1.9.9</version>
+					<version>1.10.6</version>
 					<configuration>
-						<path>/</path>
-						<contextReloadable>true</contextReloadable>
 						<container>
-							<timeout>0</timeout>
-							<containerId>tomcat9x</containerId>
-							<installerZipFile>https://repo1.maven.apache.org/maven2/org/acache/tomcat/tomcat/9.0.58/tomcat-9.0.58.zip
-							</installerZipFile>
+							<containerId>tomcat10x</containerId>
 						</container>
+						<configuration>
+							<properties>
+								<cargo.servlet.port>9090</cargo.servlet.port>
+								<cargo.logging>low</cargo.logging>
+							</properties>
+						</configuration>
 					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
+
 </project>

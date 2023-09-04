@@ -3,12 +3,12 @@ package com.training.springwebsecurity.config;
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,12 +16,20 @@ import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableMethodSecurity
+public class WebSecurityConfig {
 
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return NoOpPasswordEncoder.getInstance();
+	}
+	
 	@Bean
 	public DataSource dataSource() {
 		return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).addDefaultScripts().build();
@@ -47,30 +55,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
+	MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+	    return new MvcRequestMatcher.Builder(introspector);
 	}
+	
+	@Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+        http.csrf(csrf -> {csrf.disable();})
+            .authorizeHttpRequests((authz) -> authz
+            		.requestMatchers(mvc.pattern("/"),mvc.pattern("/login"),mvc.pattern("/csrf"),mvc.pattern("/csrfSubmit")).permitAll()
+            		.requestMatchers(mvc.pattern("/admin")).hasRole("ADMIN")
+            )
+	        .formLogin((formLogin) -> {System.out.println("http form operation performed");
+	        		formLogin.loginPage("/login");
+	        })
+	        .logout((logout) -> {
+	        	logout.logoutRequestMatcher(mvc.pattern("/logout"));
+	        	logout.logoutSuccessUrl("/");
+	         })
+	        .rememberMe( rememberMe -> {
+	        	rememberMe.key("rem-me-key");
+	        	rememberMe.rememberMeParameter("remember"); // it is name of checkbox at login page   
+	        	rememberMe.rememberMeCookieName("rememberlogin"); // it is name of the cookie
+	        	rememberMe.tokenValiditySeconds(40) ;// remember for number of seconds  
+	        	
+	        });
+        return http.build();
+    }
 
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http//.csrf().disable()
-			.authorizeRequests()
-				.antMatchers("/","/csrf*").permitAll()  // it allow for anyuser
-				.antMatchers("/admin").authenticated() // check authentication 
-				.antMatchers("/admin").hasAnyRole("ADMIN")  // check authorization 
-				.and()
-			.formLogin()
-				.loginPage("/login").permitAll()
-				.and()
-	        .logout()
-	        	.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-	        	.and()
-	        .rememberMe()
-	        	.key("rem-me-key") // it is name of checkbox at login page
-	        	.rememberMeParameter("remember") // it is name of the cookie  
-	        	.rememberMeCookieName("rememberlogin")
-	        	.tokenValiditySeconds(40) ;// remember for number of seconds  
-
-		}
 }
