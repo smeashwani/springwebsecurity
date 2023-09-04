@@ -50,7 +50,9 @@ public class WebSecurityConfig {
             		.requestMatchers(mvc.pattern("/")).permitAll()
             		.requestMatchers(mvc.pattern("/admin")).hasRole("ADMIN")
             )
-            .formLogin();
+        .formLogin((temp) -> {
+        	System.out.println("http form operation performed");
+        });
         return http.build();
     }
 }
