@@ -1,7 +1,5 @@
 package com.training.springwebsecurity.config;
 
-import java.util.Arrays;
-
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
@@ -21,7 +19,6 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
@@ -66,7 +63,17 @@ public class WebSecurityConfig {
 	
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
-        http.cors(cors -> cors.disable())
+        http/*.cors(cors -> {
+        	UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        	CorsConfiguration config = new CorsConfiguration();
+    		config.setAllowCredentials(true);
+    		config.addAllowedOrigin("http://127.0.0.1:5500");
+    		config.addAllowedHeader("*");
+    		config.addAllowedMethod("*");
+    		source.registerCorsConfiguration("/**", config);
+        	cors.configurationSource(source);
+        	})*/
+        	.cors(cors -> cors.disable())
         	.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests((authz) -> authz
             		.requestMatchers(mvc.pattern("/"),mvc.pattern("/login"),mvc.pattern("/csrf"),mvc.pattern("/csrfSubmit")).permitAll()

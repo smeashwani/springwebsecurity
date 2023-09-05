@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.training.springwebsecurity.service.MyService;
-@CrossOrigin(origins = "http://127.0.0.1:5500")
+
+//Class level cors - apply for all methods
+//@CrossOrigin(origins = "http://127.0.0.1:5500",  maxAge = 3600 ) // 3600 seconds
 @Controller
 public class HomeController {
 	
@@ -37,6 +39,7 @@ public class HomeController {
 		return "csrf";
 	}
 	
+	@CrossOrigin(origins = "http://127.0.0.1:5500",  maxAge = 3600 ) // 3600 seconds //method level cors 
 	@RequestMapping(value = "/csrfSubmit", method = RequestMethod.POST)
 	public String csrfSubmit(String name) {
 		System.out.println("Processing the csrfSubmit Request: "+name);
